@@ -33,22 +33,27 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
     # Se quiser inserir uma imagem local ou de URL
     # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
     # ou
-    st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="Imagem de petróleo")
+    st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="")
 
     st.title("Histórico de Preços com Filtro de Datas")
 
-    # Função para carregar os dados (usa cache para otimizar)
+    import streamlit as st
+    import pandas as pd
+    import plotly.express as px
+
+    st.title("Histórico de Preços com Filtro de Datas")
+
+    # Função para carregar os dados com cache
     @st.cache_data
     def carregar_dados():
         return pd.read_csv("petroleo_hist.csv", sep=";", parse_dates=["ds"])
 
     df = carregar_dados()
 
-    # Exibe as primeiras linhas (opcional)
     st.write("Primeiras linhas dos dados:")
     st.dataframe(df.head())
 
-    # Obtém as datas mínima e máxima dos dados
+    # Obtém a data mínima e máxima do DataFrame
     data_min = df["ds"].min()
     data_max = df["ds"].max()
 
@@ -62,29 +67,47 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
         max_value=data_max
     )
 
-    # Botão para aplicar o filtro
-    if st.button("Aplicar Filtro"):
+    # Cria duas colunas para os botões
+    col1, col2 = st.columns(2)
+
+    with col1:
+        aplicar = st.button("Aplicar Filtro")
+    with col2:
+        limpar = st.button("Limpar Filtro")
+
+    # Se o usuário clicar em "Aplicar Filtro"
+    if aplicar:
         if len(intervalo_datas) == 2:
             data_inicial, data_final = intervalo_datas
         else:
             data_inicial, data_final = data_min, data_max
 
-        # Filtrando os dados conforme o intervalo selecionado
+        # Filtra o DataFrame conforme as datas selecionadas
         df_filtrado = df[(df["ds"] >= pd.to_datetime(data_inicial)) &
                          (df["ds"] <= pd.to_datetime(data_final))]
 
         st.write(f"Exibindo dados de {data_inicial} até {data_final}")
-
-        # Criando o gráfico com Plotly Express
         fig = px.line(
             df_filtrado,
             x="ds",
-            y="y",  # ajuste o nome da coluna de preço se necessário
+            y="y",  # ajuste o nome da coluna se necessário
             title="Histórico de Preços do Petróleo Brent",
             labels={"ds": "Data", "y": "Preço (US$)"}
         )
-    
         st.plotly_chart(fig, use_container_width=True)
+
+    # Se o usuário clicar em "Limpar Filtro"
+    if limpar:
+        st.write("Exibindo dados completos")
+        fig = px.line(
+            df,
+            x="ds",
+            y="y",
+            title="Histórico de Preços do Petróleo Brent (Completo)",
+            labels={"ds": "Data", "y": "Preço (US$)"}
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
 
 
 # -------------------------------------------
