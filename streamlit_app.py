@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import joblib as jl
 import plotly.graph_objects as go
+import plotly.express as px
 from prophet import Prophet
 
 # Título geral do app
@@ -36,16 +37,12 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
     # ou
     # st.image("https://path.to/alguma_imagem.jpg", caption="Imagem de contexto")
 
-    import streamlit as st
-    import pandas as pd
-    import plotly.express as px
-
     st.title("Gráfico Histórico com Filtro de Datas")
 
     # 1) Ler o CSV (exemplo: "historico_brent.csv") na mesma pasta do app
     @st.cache_data  # cache para acelerar re-leituras
     def carregar_dados():
-        df = pd.read_csv("petroleo_hist.csv", parse_dates=["ds"])
+        df = pd.read_csv("petroleo_hist.csv", sep=";", parse_dates=["ds"])
         return df
 
     df = carregar_dados()
