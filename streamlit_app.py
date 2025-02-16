@@ -149,7 +149,7 @@ O gráfico mostrará o histórico (apenas 1 ano antes do início da previsão) e
     
         st.subheader("Previsões Geradas")
         st.write(f"Exibindo histórico de 1 ano (a partir de {one_year_before.date()}) até o início da previsão ({forecast_future_start.date()}) e a previsão para os próximos {horizonte} dia(s).")
-        st.dataframe(df_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+        st.dataframe(df_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].reset_index(drop=True))
     
     # Construindo o gráfico com Plotly Graph Objects
         fig = go.Figure()
