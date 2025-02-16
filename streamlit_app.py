@@ -2,16 +2,15 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib as jl
-import plotly.express as px
+import plotly.graph_objects as go
 from prophet import Prophet
 
-# Se quiser apenas st.line_chart, pode usar matplotlib ou streamlit nativo
-
-st.title("Previsão de Preço do Petróleo (Brent)")
+st.title("🛢️ Previsão de Preço do Petróleo (Brent)")
 
 st.write("""
-Este aplicativo carrega um modelo *Prophet* previamente treinado (salvo em 
-*modelo_prophet.joblib) para prever os próximos **X dias* do preço do petróleo.
+Este aplicativo carrega um modelo *Prophet* previamente treinado para prever 
+os próximos dias do preço do petróleo e mostra o histórico em uma cor e 
+a parte futura em outra.
 """)
 
 # 1) Carregando o modelo Prophet
@@ -21,9 +20,9 @@ try:
 except FileNotFoundError:
     st.error("Arquivo 'modelo_prophet.joblib' não encontrado! "
              "Por favor, coloque-o na mesma pasta do app.py.")
-    st.stop()  # Interrompe a execução se não encontrar o modelo
+    st.stop()
 
-# 2) Entrada do usuário para horizonte de previsão
+# 2) Selecionar horizonte de previsão
 horizonte = st.slider(
     "Selecione o horizonte de previsão (em dias):",
     min_value=1,
@@ -32,53 +31,86 @@ horizonte = st.slider(
     step=1
 )
 
-# 3) Botão para gerar previsão
+# 3) Ao clicar em "Gerar Previsão"
 if st.button("Gerar Previsão"):
-    # Cria um DataFrame de datas futuras com base no modelo
-    futuro = modelo_prophet.make_future_dataframe(
-        periods=horizonte, 
-        freq='D'
-    )
-    
-    # Faz a previsão
+    # Gera todo o DataFrame de previsão (histórico + futuro)
+    futuro = modelo_prophet.make_future_dataframe(periods=horizonte, freq='D')
     forecast = modelo_prophet.predict(futuro)
-    
-    # Seleciona apenas as linhas referentes ao futuro (últimas 'horizonte' datas)
-    forecast_future = forecast.tail(horizonte)
-    
-    st.subheader("Previsões Geradas")
+
+    # Separa em duas partes:
+    # - df_history: tudo exceto os últimos `horizonte` dias
+    # - df_future: últimos `horizonte` dias (o "trecho previsto")
+    total_rows = forecast.shape[0]
+    df_history = forecast.iloc[: total_rows - horizonte]
+    df_future = forecast.iloc[total_rows - horizonte : ]
+
+    st.subheader("Previsões Geradas (Últimos dias)")
     st.write("""
-    Abaixo estão as previsões para os próximos dias, incluindo o intervalo de 
-    confiança de 90% (colunas ⁠ yhat_lower ⁠ e ⁠ yhat_upper ⁠).
+    Abaixo estão **somente** as previsões futuras (até o horizonte selecionado),
+    incluindo o intervalo de confiança.
     """)
-    st.dataframe(forecast_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
-    
-    # Plot do resultado com Plotly
-    fig = px.line(
-        forecast,
-        x='ds',
-        y='yhat',
-        labels={'ds': 'Data', 'yhat': 'Preço Previsto'},
-        title='Previsão do Preço do Petróleo'
-    )
-    
-    # Adicionando banda de confiança (ribbon)
-    fig.add_scatter(
-        x=forecast['ds'], 
-        y=forecast['yhat_lower'],
+    st.dataframe(df_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
+
+    # 4) Construindo o gráfico com plotly.graph_objects
+    fig = go.Figure()
+
+    # --- HISTÓRICO / TREINO ---
+    fig.add_trace(go.Scatter(
+        x=df_history['ds'], 
+        y=df_history['yhat'],
+        mode='lines',
+        name='Histórico (ajuste do modelo)',
+        line=dict(color='blue')
+    ))
+    # Intervalos do histórico (opcional)
+    fig.add_trace(go.Scatter(
+        x=df_history['ds'],
+        y=df_history['yhat_lower'],
         fill=None,
         mode='lines',
         line_color='lightblue',
-        name='Limite Inferior'
-    )
-    fig.add_scatter(
-        x=forecast['ds'],
-        y=forecast['yhat_upper'],
-        fill='tonexty',  # preenche até a curva anterior
+        name='Limite Inferior Histórico'
+    ))
+    fig.add_trace(go.Scatter(
+        x=df_history['ds'],
+        y=df_history['yhat_upper'],
+        fill='tonexty',
         mode='lines',
         line_color='lightblue',
-        name='Limite Superior'
+        name='Limite Superior Histórico'
+    ))
+
+    # --- FUTURO / PREVISÃO ---
+    fig.add_trace(go.Scatter(
+        x=df_future['ds'], 
+        y=df_future['yhat'],
+        mode='lines',
+        name='Previsão',
+        line=dict(color='red')
+    ))
+    # Intervalos do futuro
+    fig.add_trace(go.Scatter(
+        x=df_future['ds'],
+        y=df_future['yhat_lower'],
+        fill=None,
+        mode='lines',
+        line_color='pink',
+        name='Limite Inferior Futuro'
+    ))
+    fig.add_trace(go.Scatter(
+        x=df_future['ds'],
+        y=df_future['yhat_upper'],
+        fill='tonexty',
+        mode='lines',
+        line_color='pink',
+        name='Limite Superior Futuro'
+    ))
+
+    fig.update_layout(
+        title='Previsão do Preço do Petróleo (Histórico vs. Futuro)',
+        xaxis_title='Data',
+        yaxis_title='Preço Previsto'
     )
-    
-    # Exibe o gráfico
+
     st.plotly_chart(fig, use_container_width=True)
+
