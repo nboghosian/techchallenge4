@@ -30,9 +30,8 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 
     """)
 
-    # Se quiser inserir uma imagem local ou de URL
+
     # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
-    # ou
     st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="")
 
 
@@ -44,9 +43,6 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
         return pd.read_csv("petroleo_hist.csv", sep=";", parse_dates=["ds"])
 
     df = carregar_dados()
-
-    st.write("Primeiras linhas dos dados:")
-    st.dataframe(df.head())
 
     # Obtém a data mínima e máxima do DataFrame
     data_min = df["ds"].min()
@@ -112,13 +108,25 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 with tab2:
     st.header("Previsão do Preço com Prophet")
 
+    import streamlit as st
+    import pandas as pd
+    import joblib as jl
+    import plotly.graph_objects as go
+    from prophet import Prophet
+
+    st.title("🛢️ Previsão do Preço do Petróleo (Brent)")
+
+    st.write("""
+Este aplicativo carrega um modelo *Prophet* previamente treinado para prever os próximos dias do preço do petróleo. 
+O gráfico mostrará o histórico (apenas 1 ano antes do início da previsão) em azul e a previsão futura em vermelho.
+    """)
+
     # 1) Carregando o modelo Prophet
     try:
         modelo_prophet = jl.load('modelo_prophet.joblib')
         st.success("Modelo Prophet carregado com sucesso!")
     except FileNotFoundError:
-        st.error("Arquivo 'modelo_prophet.joblib' não encontrado! "
-                 "Por favor, coloque-o na mesma pasta do app.py.")
+        st.error("Arquivo 'modelo_prophet.joblib' não encontrado! Por favor, coloque-o na mesma pasta do app.py.")
         st.stop()
 
     # 2) Selecionar horizonte de previsão
@@ -132,51 +140,56 @@ with tab2:
 
     # 3) Botão para gerar previsão
     if st.button("Gerar Previsão"):
-        # Gera todo o DataFrame de previsão (histórico + futuro)
+        # Gera todo o DataFrame de previsão (historico + futuro)
         futuro = modelo_prophet.make_future_dataframe(periods=horizonte, freq='D')
         forecast = modelo_prophet.predict(futuro)
 
-        # Separa em duas partes:
-        # - df_history: tudo exceto os últimos `horizonte` dias
-        # - df_future: últimos `horizonte` dias (o "trecho previsto")
-        total_rows = forecast.shape[0]
-        df_history = forecast.iloc[: total_rows - horizonte]
-        df_future = forecast.iloc[total_rows - horizonte : ]
-
-        st.subheader("Previsões Geradas (Últimos dias)")
-        st.write("Exibimos apenas as **previsões futuras** (até o horizonte selecionado).")
+        # Separa os dados futuros: os últimos 'horizonte' dias
+        df_future = forecast.iloc[-horizonte:]
+    
+        # Define a data de início da previsão futura
+        forecast_future_start = df_future['ds'].iloc[0]
+        # Calcula a data correspondente a 1 ano antes
+        one_year_before = forecast_future_start - pd.DateOffset(years=1)
+    
+    # Seleciona a parte histórica: dados entre one_year_before e o início do forecast futuro
+        df_history = forecast[(forecast['ds'] >= one_year_before) & (forecast['ds'] < forecast_future_start)]
+    
+        st.subheader("Previsões Geradas")
+        st.write(f"Exibindo histórico de 1 ano (a partir de {one_year_before.date()}) até o início da previsão ({forecast_future_start.date()}) e a previsão para os próximos {horizonte} dia(s).")
         st.dataframe(df_future[['ds', 'yhat', 'yhat_lower', 'yhat_upper']])
-
-        # Construindo o gráfico
+    
+    # Construindo o gráfico com Plotly Graph Objects
         fig = go.Figure()
-
-        # HISTÓRICO
+    
+    # Histórico: linha em azul
         fig.add_trace(go.Scatter(
             x=df_history['ds'],
             y=df_history['yhat'],
             mode='lines',
-            name='Histórico (ajuste do modelo)',
+            name='Histórico (1 ano)',
             line=dict(color='blue')
         ))
-        # Intervalos do histórico (opcional)
+    # Limites do histórico (opcional)
         fig.add_trace(go.Scatter(
             x=df_history['ds'],
             y=df_history['yhat_lower'],
-            fill=None,
             mode='lines',
-            line_color='lightblue',
-            name='Limite Inferior (Hist)'
+            name='Limite Inferior (Hist)',
+            line=dict(color='lightblue'),
+            showlegend=False
         ))
         fig.add_trace(go.Scatter(
             x=df_history['ds'],
             y=df_history['yhat_upper'],
-            fill='tonexty',
             mode='lines',
-            line_color='lightblue',
-            name='Limite Superior (Hist)'
+            name='Limite Superior (Hist)',
+            line=dict(color='lightblue'),
+            fill='tonexty',
+            showlegend=False
         ))
-
-        # FUTURO
+    
+        # Previsão futura: linha em vermelho
         fig.add_trace(go.Scatter(
             x=df_future['ds'],
             y=df_future['yhat'],
@@ -187,26 +200,27 @@ with tab2:
         fig.add_trace(go.Scatter(
             x=df_future['ds'],
             y=df_future['yhat_lower'],
-            fill=None,
             mode='lines',
-            line_color='pink',
-            name='Limite Inferior (Fut)'
+            name='Limite Inferior (Fut)',
+            line=dict(color='pink'),
+            showlegend=False
         ))
         fig.add_trace(go.Scatter(
             x=df_future['ds'],
             y=df_future['yhat_upper'],
-            fill='tonexty',
             mode='lines',
-            line_color='pink',
-            name='Limite Superior (Fut)'
+            name='Limite Superior (Fut)',
+            line=dict(color='pink'),
+            fill='tonexty',
+            showlegend=False
         ))
-
+    
         fig.update_layout(
-            title='Previsão do Preço do Petróleo (Histórico vs. Futuro)',
+            title='Previsão do Preço do Petróleo: Histórico (1 ano) vs. Futuro',
             xaxis_title='Data',
             yaxis_title='Preço Previsto'
         )
-
+    
         st.plotly_chart(fig, use_container_width=True)
 
 
