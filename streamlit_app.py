@@ -38,51 +38,46 @@ with tab1:
     # st.image("https://path.to/alguma_imagem.jpg", caption="Imagem de contexto")
 
 
-st.title("Gráfico Histórico com Filtro de Datas")
+    st.title("Gráfico Histórico com Filtro de Datas")
 
-# 1) Ler o CSV (exemplo: "petroleo_hist.csv") na mesma pasta do app
-@st.cache_data  # cache para acelerar re-leituras
-def carregar_dados():
-    df = pd.read_csv("petroleo_hist.csv", parse_dates=["ds"])
-    return df
 
-df = carregar_dados()
+    def carregar_dados():
+        df = pd.read_csv("petroleo_hist.csv", parse_dates=["ds"])
+        return df
 
-# Mostra o DataFrame inteiro (opcional)
-st.write("Dados Históricos (primeiras linhas):")
-st.dataframe(df.head())
+    df = carregar_dados()
 
 # 2) Selecionar intervalo de datas
 # Pega data mínima e máxima do próprio DataFrame
-data_min = df["ds"].min()
-data_max = df["ds"].max()
+    data_min = df["ds"].min()
+    data_max = df["ds"].max()
 
-st.write("Selecione o intervalo de datas que deseja visualizar:")
-intervalo_datas = st.date_input("Intervalo", 
+    st.write("Selecione o intervalo de datas que deseja visualizar:")
+    intervalo_datas = st.date_input("Intervalo", 
                                 value=[data_min, data_max], 
                                 min_value=data_min, 
                                 max_value=data_max)
 
 # O Streamlit retorna uma tupla ou lista [start_date, end_date]
-if len(intervalo_datas) == 2:
-    data_inicial, data_final = intervalo_datas[0], intervalo_datas[1]
-else:
+    if len(intervalo_datas) == 2:
+        data_inicial, data_final = intervalo_datas[0], intervalo_datas[1]
+    else:
     data_inicial, data_final = data_min, data_max
 
 # 3) Filtrando o DataFrame
-df_filtrado = df[(df["ds"] >= pd.to_datetime(data_inicial)) & 
+    df_filtrado = df[(df["ds"] >= pd.to_datetime(data_inicial)) & 
                  (df["ds"] <= pd.to_datetime(data_final))]
 
-st.write(f"Exibindo dados de {data_inicial} até {data_final}")
+    st.write(f"Exibindo dados de {data_inicial} até {data_final}")
 
 # 4) Plotar o resultado
-fig = px.line(df_filtrado, 
+    fig = px.line(df_filtrado, 
               x="ds", 
               y="y",  # Ajuste com a coluna de preço
               title="Histórico de Preços do Petróleo Brent",
               labels={"ds": "Data", "y": "Preço (US$)"})
 
-st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True)
 
 
 # -------------------------------------------
