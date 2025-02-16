@@ -36,7 +36,7 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
     st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="")
 
 
-    st.subtitle("Histórico de Preços com Filtro de Datas")
+    st.subheader("Histórico de Preços com Filtro de Datas")
 
     # Função para carregar os dados com cache
     @st.cache_data
