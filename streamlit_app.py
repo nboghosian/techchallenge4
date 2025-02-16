@@ -35,13 +35,8 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
     # ou
     st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="")
 
-    st.title("Histórico de Preços com Filtro de Datas")
 
-    import streamlit as st
-    import pandas as pd
-    import plotly.express as px
-
-    st.title("Histórico de Preços com Filtro de Datas")
+    st.subtitle("Histórico de Preços com Filtro de Datas")
 
     # Função para carregar os dados com cache
     @st.cache_data
@@ -94,6 +89,7 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
             title="Histórico de Preços do Petróleo Brent",
             labels={"ds": "Data", "y": "Preço (US$)"}
         )
+        fig.update_traces(line=dict(color="aquamarine"))
         st.plotly_chart(fig, use_container_width=True)
 
     # Se o usuário clicar em "Limpar Filtro"
