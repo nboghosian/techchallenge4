@@ -40,10 +40,10 @@ with tab1:
 
 st.title("Gráfico Histórico com Filtro de Datas")
 
-# 1) Ler o CSV (exemplo: "historico_brent.csv") na mesma pasta do app
+# 1) Ler o CSV (exemplo: "petroleo_hist.csv") na mesma pasta do app
 @st.cache_data  # cache para acelerar re-leituras
 def carregar_dados():
-    df = pd.read_csv("historico_brent.csv", parse_dates=["ds"])
+    df = pd.read_csv("petroleo_hist.csv", parse_dates=["ds"])
     return df
 
 df = carregar_dados()
