@@ -85,7 +85,7 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
             title="Histórico de Preços do Petróleo Brent",
             labels={"ds": "Data", "y": "Preço (US$)"}
         )
-        fig.update_traces(line=dict(color="aquamarine"))
+        fig.update_traces(line=dict(color="lightblue"))
         st.plotly_chart(fig, use_container_width=True)
 
     # Se o usuário clicar em "Limpar Filtro"
@@ -107,14 +107,6 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 # -------------------------------------------
 with tab2:
     st.header("Previsão do Preço com Prophet")
-
-    import streamlit as st
-    import pandas as pd
-    import joblib as jl
-    import plotly.graph_objects as go
-    from prophet import Prophet
-
-    st.title("🛢️ Previsão do Preço do Petróleo (Brent)")
 
     st.write("""
 Este aplicativo carrega um modelo *Prophet* previamente treinado para prever os próximos dias do preço do petróleo. 
