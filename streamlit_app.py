@@ -30,58 +30,61 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 
     """)
 
-    st.subheader("Imagem Exemplo")
-    st.write("Podemos mostrar gráficos estatísticos, diagramas, ou qualquer figura explicativa.")
     # Se quiser inserir uma imagem local ou de URL
     # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
     # ou
-    # st.image("https://path.to/alguma_imagem.jpg", caption="Imagem de contexto")
+    st.image("https://s2.glbimg.com/ZIPcGot1Af66bTwWlLN0CT1U6FM=/620x350/e.glbimg.com/og/ed/f/original/2020/07/01/111245902_gettyimages-103256923.jpg", caption="Imagem de petróleo")
 
-    st.title("Gráfico Histórico com Filtro de Datas")
+    st.title("Histórico de Preços com Filtro de Datas")
 
-    # 1) Ler o CSV (exemplo: "historico_brent.csv") na mesma pasta do app
-    @st.cache_data  # cache para acelerar re-leituras
+    # Função para carregar os dados (usa cache para otimizar)
+    @st.cache_data
     def carregar_dados():
-        df = pd.read_csv("petroleo_hist.csv", sep=";", parse_dates=["ds"])
-        return df
+        return pd.read_csv("petroleo_hist.csv", sep=";", parse_dates=["ds"])
 
     df = carregar_dados()
 
-    # Mostra o DataFrame inteiro (opcional)
-    st.write("Dados Históricos (primeiras linhas):")
+    # Exibe as primeiras linhas (opcional)
+    st.write("Primeiras linhas dos dados:")
     st.dataframe(df.head())
 
-    # 2) Selecionar intervalo de datas
-    # Pega data mínima e máxima do próprio DataFrame
+    # Obtém as datas mínima e máxima dos dados
     data_min = df["ds"].min()
     data_max = df["ds"].max()
 
     st.write("Selecione o intervalo de datas que deseja visualizar:")
-    intervalo_datas = st.date_input("Intervalo", 
-                                value=[data_min, data_max], 
-                                min_value=data_min, 
-                                max_value=data_max)
 
-    # O Streamlit retorna uma tupla ou lista [start_date, end_date]
-    if len(intervalo_datas) == 2:
-        data_inicial, data_final = intervalo_datas[0], intervalo_datas[1]
-    else:
-        data_inicial, data_final = data_min, data_max
+    # Widget para selecionar intervalo de datas
+    intervalo_datas = st.date_input(
+        "Intervalo",
+        value=[data_min, data_max],
+        min_value=data_min,
+        max_value=data_max
+    )
 
-    # 3) Filtrando o DataFrame
-    df_filtrado = df[(df["ds"] >= pd.to_datetime(data_inicial)) & 
-                 (df["ds"] <= pd.to_datetime(data_final))]
+    # Botão para aplicar o filtro
+    if st.button("Aplicar Filtro"):
+        if len(intervalo_datas) == 2:
+            data_inicial, data_final = intervalo_datas
+        else:
+            data_inicial, data_final = data_min, data_max
 
-    st.write(f"Exibindo dados de {data_inicial} até {data_final}")
+        # Filtrando os dados conforme o intervalo selecionado
+        df_filtrado = df[(df["ds"] >= pd.to_datetime(data_inicial)) &
+                         (df["ds"] <= pd.to_datetime(data_final))]
 
-    # 4) Plotar o resultado
-    fig = px.line(df_filtrado, 
-              x="ds", 
-              y="y",  # Ajuste com a coluna de preço
-              title="Histórico de Preços do Petróleo Brent",
-              labels={"ds": "Data", "y": "Preço (US$)"})
+        st.write(f"Exibindo dados de {data_inicial} até {data_final}")
 
-    st.plotly_chart(fig, use_container_width=True)
+        # Criando o gráfico com Plotly Express
+        fig = px.line(
+            df_filtrado,
+            x="ds",
+            y="y",  # ajuste o nome da coluna de preço se necessário
+            title="Histórico de Preços do Petróleo Brent",
+            labels={"ds": "Data", "y": "Preço (US$)"}
+        )
+    
+        st.plotly_chart(fig, use_container_width=True)
 
 
 # -------------------------------------------
