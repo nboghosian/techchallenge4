@@ -9,15 +9,15 @@ from prophet import Prophet
 st.title("🛢️ Análise e Previsão de Preço do Petróleo (Brent)")
 
 # =========================================
-# CRIA AS DUAS ABAS
+# CRIA AS ABAS
 # =========================================
-tab1, tab2 = st.tabs(["Contextualização", "Previsões"])
+tab1, tab2, tab3 = st.tabs(["Contextualização", "Insights", "Previsão"])
 
 # -------------------------------------------
 # TAB 1: Texto e Imagens
 # -------------------------------------------
 with tab1:
-    st.header("Entenda o Contexto do Petróleo Brent")
+    st.header("💬 Entenda o Contexto do Petróleo Brent")
     st.write("""
     O mercado de petróleo é um dos mais influentes na economia global, impactando desde o custo de produção industrial até os preços ao consumidor. O petróleo Brent, referência internacional para precificação da commodity, é negociado diariamente e sua volatilidade pode ser influenciada por fatores geopolíticos, variações na demanda, mudanças na oferta e políticas econômicas (Hamilton, 2009).
 A análise de dados históricos de preços do petróleo Brent, disponível no repositório do Instituto de Pesquisa Econômica Aplicada (IPEA), fornece uma base essencial para identificar tendências, padrões sazonais e possíveis ciclos de preço. Essa base de dados é composta por duas colunas principais: data e preço (em dólares), permitindo uma abordagem quantitativa para modelagem preditiva e análise de impacto econômico (IPEA, 2024).
@@ -100,19 +100,51 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
         )
         st.plotly_chart(fig, use_container_width=True)
 
-
-
 # -------------------------------------------
-# TAB 2: Forecast com Prophet
+# TAB 2: Insights
 # -------------------------------------------
 with tab2:
-    st.header("Previsão do Preço com Prophet")
+    st.header("✨ Principais Insights")
 
+    # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
     st.write("""
-Este aplicativo carrega um modelo *Prophet* previamente treinado para prever os próximos dias do preço do petróleo. 
-O gráfico mostrará o histórico (apenas 1 ano antes do início da previsão) em azul e a previsão futura em vermelho.
+    Apesar da volatilidade inerente ao mercado de petróleo, as análises iniciais de autocorrelação indicaram a presença de memória longa na série, sugerindo que valores passados exercem influência ao longo de períodos mais extensos. Esse comportamento pode estar ligado a ciclos prolongados de oferta e demanda, à ação coordenada de grandes exportadores ou a flutuações econômicas persistentes.
+
+Com base nesses achados, decidiu-se testar diferentes modelos:
+
+- Naive e SeasonalNaive – Servem como pontos de partida e linhas de base para comparação. O Naive assume que o próximo valor será igual ao último observado, enquanto o SeasonalNaive introduz o conceito de sazonalidade, projetando o valor de hoje com base no mesmo dia de um período anterior (por exemplo, o valor observado 7 dias atrás em dados diários).
+
+- Prophet – Desenvolvido pelo Facebook (Meta), lida bem com tendências não lineares, sazonalidades múltiplas e efeitos de feriados ou eventos específicos, caso sejam informados. Também pode capturar parte de uma memória mais longa, sobretudo quando há sinais de ciclos prolongados.
+
+A decisão sobre qual modelo utilizar depende, em última instância, dos resultados de validação e da capacidade de cada método em capturar tanto as flutuações de curto prazo quanto a persistência de longo prazo observada na série. A presença de memória longa levanta a possibilidade de que modelos como o Prophet, quando configurados para lidar com sazonalidades ou componentes de tendência mais extensas, possam apresentar melhor desempenho no horizonte pretendido. Por outro lado, métodos mais simples como Naive e SeasonalNaive servem de benchmarks e podem, surpreendentemente, apresentar bons resultados em cenários de alta variabilidade onde grande parte do comportamento recente determina o valor futuro imediato.
+Dado o contexto de consultoria, em que decisões estratégicas costumam se estender além de poucos dias, é mais vantajoso focar em horizontes de previsão mais amplos (30 e 90 dias). Embora o modelo Naive tenha apresentado bons resultados de curtíssimo prazo (1 e 7 dias), ele se mostra limitado quando a projeção é estendida. Já o Prophet demonstrou maior precisão ao longo de períodos maiores, capturando melhor tendências e sazonalidades que impactam o mercado em semanas ou meses.
+
+Portanto, visando orientar o cliente sobre planejamento, compra de insumos, definição de estoques ou negociações de médio e longo prazo, o Prophet seria a escolha mais indicada, visto que apresenta menor erro (WMAPE) para janelas de 30 e 90 dias. Em suma, a capacidade do Prophet de modelar componentes de tendência e sazonalidade faz com que ele ofereça uma previsão mais robusta e alinhada às necessidades estratégicas típicas de uma consultoria voltada a decisões que excedem poucos dias de antecipação.
     """)
 
+
+    
+    
+# -------------------------------------------
+# TAB 3: Forecast com Prophet
+# -------------------------------------------
+with tab3:
+    st.header("💰 Previsão do Preço com Prophet")
+
+    st.subheader("Aplicando Modelos")
+    
+    st.write("""
+    Apesar da volatilidade inerente ao mercado de petróleo, as análises iniciais de autocorrelação indicaram a presença de memória longa na série, sugerindo que valores passados exercem influência ao longo de períodos mais extensos. Esse comportamento pode estar ligado a ciclos prolongados de oferta e demanda, à ação coordenada de grandes exportadores ou a flutuações econômicas persistentes.
+
+Com base nesses achados, decidiu-se testar diferentes modelos:
+
+Naive e SeasonalNaive – Servem como pontos de partida e linhas de base para comparação. O Naive assume que o próximo valor será igual ao último observado, enquanto o SeasonalNaive introduz o conceito de sazonalidade, projetando o valor de hoje com base no mesmo dia de um período anterior (por exemplo, o valor observado 7 dias atrás em dados diários).
+
+Prophet – Desenvolvido pelo Facebook (Meta), lida bem com tendências não lineares, sazonalidades múltiplas e efeitos de feriados ou eventos específicos, caso sejam informados. Também pode capturar parte de uma memória mais longa, sobretudo quando há sinais de ciclos prolongados.
+
+A decisão sobre qual modelo utilizar depende, em última instância, dos resultados de validação e da capacidade de cada método em capturar tanto as flutuações de curto prazo quanto a persistência de longo prazo observada na série. A presença de memória longa levanta a possibilidade de que modelos como o Prophet e o AutoARIMA, quando configurados para lidar com sazonalidades ou componentes de tendência mais extensas, possam apresentar melhor desempenho no horizonte pretendido. Por outro lado, métodos mais simples como Naive e SeasonalNaive servem de benchmarks e podem, surpreendentemente, apresentar bons resultados em cenários de alta variabilidade onde grande parte do comportamento recente determina o valor futuro imediato.
+
+    """)
     # 1) Carregando o modelo Prophet
     try:
         modelo_prophet = jl.load('modelo_prophet.joblib')
