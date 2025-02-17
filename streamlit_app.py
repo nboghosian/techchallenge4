@@ -108,18 +108,7 @@ with tab2:
 
     # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
     st.write("""
-    Apesar da volatilidade inerente ao mercado de petróleo, as análises iniciais de autocorrelação indicaram a presença de memória longa na série, sugerindo que valores passados exercem influência ao longo de períodos mais extensos. Esse comportamento pode estar ligado a ciclos prolongados de oferta e demanda, à ação coordenada de grandes exportadores ou a flutuações econômicas persistentes.
-
-Com base nesses achados, decidiu-se testar diferentes modelos:
-
-- Naive e SeasonalNaive – Servem como pontos de partida e linhas de base para comparação. O Naive assume que o próximo valor será igual ao último observado, enquanto o SeasonalNaive introduz o conceito de sazonalidade, projetando o valor de hoje com base no mesmo dia de um período anterior (por exemplo, o valor observado 7 dias atrás em dados diários).
-
-- Prophet – Desenvolvido pelo Facebook (Meta), lida bem com tendências não lineares, sazonalidades múltiplas e efeitos de feriados ou eventos específicos, caso sejam informados. Também pode capturar parte de uma memória mais longa, sobretudo quando há sinais de ciclos prolongados.
-
-A decisão sobre qual modelo utilizar depende, em última instância, dos resultados de validação e da capacidade de cada método em capturar tanto as flutuações de curto prazo quanto a persistência de longo prazo observada na série. A presença de memória longa levanta a possibilidade de que modelos como o Prophet, quando configurados para lidar com sazonalidades ou componentes de tendência mais extensas, possam apresentar melhor desempenho no horizonte pretendido. Por outro lado, métodos mais simples como Naive e SeasonalNaive servem de benchmarks e podem, surpreendentemente, apresentar bons resultados em cenários de alta variabilidade onde grande parte do comportamento recente determina o valor futuro imediato.
-Dado o contexto de consultoria, em que decisões estratégicas costumam se estender além de poucos dias, é mais vantajoso focar em horizontes de previsão mais amplos (30 e 90 dias). Embora o modelo Naive tenha apresentado bons resultados de curtíssimo prazo (1 e 7 dias), ele se mostra limitado quando a projeção é estendida. Já o Prophet demonstrou maior precisão ao longo de períodos maiores, capturando melhor tendências e sazonalidades que impactam o mercado em semanas ou meses.
-
-Portanto, visando orientar o cliente sobre planejamento, compra de insumos, definição de estoques ou negociações de médio e longo prazo, o Prophet seria a escolha mais indicada, visto que apresenta menor erro (WMAPE) para janelas de 30 e 90 dias. Em suma, a capacidade do Prophet de modelar componentes de tendência e sazonalidade faz com que ele ofereça uma previsão mais robusta e alinhada às necessidades estratégicas típicas de uma consultoria voltada a decisões que excedem poucos dias de antecipação.
+    escrever aqui
     """)
 
 
@@ -130,19 +119,20 @@ Portanto, visando orientar o cliente sobre planejamento, compra de insumos, defi
 # -------------------------------------------
 with tab3:
     st.header("💰 Previsão do Preço com Prophet")
-
-    st.subheader("Aplicando Modelos")
     
     st.write("""
     Apesar da volatilidade inerente ao mercado de petróleo, as análises iniciais de autocorrelação indicaram a presença de memória longa na série, sugerindo que valores passados exercem influência ao longo de períodos mais extensos. Esse comportamento pode estar ligado a ciclos prolongados de oferta e demanda, à ação coordenada de grandes exportadores ou a flutuações econômicas persistentes.
 
 Com base nesses achados, decidiu-se testar diferentes modelos:
 
-Naive e SeasonalNaive – Servem como pontos de partida e linhas de base para comparação. O Naive assume que o próximo valor será igual ao último observado, enquanto o SeasonalNaive introduz o conceito de sazonalidade, projetando o valor de hoje com base no mesmo dia de um período anterior (por exemplo, o valor observado 7 dias atrás em dados diários).
+- Naive e SeasonalNaive: Servem como pontos de partida e linhas de base para comparação. O Naive assume que o próximo valor será igual ao último observado, enquanto o SeasonalNaive introduz o conceito de sazonalidade, projetando o valor de hoje com base no mesmo dia de um período anterior (por exemplo, o valor observado 7 dias atrás em dados diários).
 
-Prophet – Desenvolvido pelo Facebook (Meta), lida bem com tendências não lineares, sazonalidades múltiplas e efeitos de feriados ou eventos específicos, caso sejam informados. Também pode capturar parte de uma memória mais longa, sobretudo quando há sinais de ciclos prolongados.
+- Prophet: Desenvolvido pelo Facebook (Meta), lida bem com tendências não lineares, sazonalidades múltiplas e efeitos de feriados ou eventos específicos, caso sejam informados. Também pode capturar parte de uma memória mais longa, sobretudo quando há sinais de ciclos prolongados.
 
-A decisão sobre qual modelo utilizar depende, em última instância, dos resultados de validação e da capacidade de cada método em capturar tanto as flutuações de curto prazo quanto a persistência de longo prazo observada na série. A presença de memória longa levanta a possibilidade de que modelos como o Prophet e o AutoARIMA, quando configurados para lidar com sazonalidades ou componentes de tendência mais extensas, possam apresentar melhor desempenho no horizonte pretendido. Por outro lado, métodos mais simples como Naive e SeasonalNaive servem de benchmarks e podem, surpreendentemente, apresentar bons resultados em cenários de alta variabilidade onde grande parte do comportamento recente determina o valor futuro imediato.
+A decisão sobre qual modelo utilizar depende, em última instância, dos resultados de validação e da capacidade de cada método em capturar tanto as flutuações de curto prazo quanto a persistência de longo prazo observada na série. A presença de memória longa levanta a possibilidade de que modelos como o Prophet, quando configurados para lidar com sazonalidades ou componentes de tendência mais extensas, possam apresentar melhor desempenho no horizonte pretendido. Por outro lado, métodos mais simples como Naive e SeasonalNaive servem de benchmarks e podem, surpreendentemente, apresentar bons resultados em cenários de alta variabilidade onde grande parte do comportamento recente determina o valor futuro imediato.
+Dado o contexto da consultoria, em que decisões estratégicas costumam se estender além de poucos dias, é mais vantajoso focar em horizontes de previsão mais amplos (30 e 90 dias). Embora o modelo Naive tenha apresentado bons resultados de curtíssimo prazo (1 e 7 dias), ele se mostra limitado quando a projeção é estendida. Já o Prophet demonstrou maior precisão ao longo de períodos maiores, capturando melhor tendências e sazonalidades que impactam o mercado em semanas ou meses.
+
+Portanto, visando orientar o cliente sobre planejamento, compra de insumos, definição de estoques ou negociações de médio e longo prazo, o Prophet foi a escolha mais indicada, visto que apresentou menor erro (WMAPE) para janelas de 30 e 90 dias. Em suma, a capacidade do Prophet de modelar componentes de tendência e sazonalidade faz com que ele ofereça uma previsão mais robusta e alinhada às necessidades estratégicas típicas de uma consultoria voltada a decisões que excedem poucos dias de antecipação.
 
     """)
     # 1) Carregando o modelo Prophet
