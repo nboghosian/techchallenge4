@@ -256,28 +256,28 @@ Portanto, visando orientar o cliente sobre planejamento, compra de insumos, defi
 # -------------------------------------------
 with tab4:
 
-    st.header("🎖️ Plano Completo de Deploy")
+    st.header("🎲 Plano Completo de Deploy")
 
     st.write(""" 1. **Desenvolvimento e Testes Locais**  
    - Criar e testar o app localmente, garantindo que todas as funcionalidades estejam funcionando conforme o esperado.  
    - Utilizar um ambiente virtual (venv ou conda) e gerenciar as dependências (via requirements.txt).
 
-
+\n\n
 2. **Gerenciamento de Dependências e Versionamento**  
    - Certificar-se de que todas as bibliotecas necessárias estejam listadas em um arquivo requirements.txt.  
    - Versionar o código usando Git, hospedando-o em um repositório (GitHub, GitLab, etc.) para facilitar a integração contínua.
 
-
+\n\n
 3. **Escolher da Plataforma de Deploy**  
    - Utilizar o Streamlit Cloud, que é uma plataforma gratuita e simples para deploy de apps Streamlit.  
    - Ou optar por outras plataformas, como Heroku, Render, AWS ou GCP, se houver necessidade de mais controle ou escalabilidade.
 
-
+\n\n
 5. **Deploy**  
    - No caso do Streamlit Cloud, conectar o repositório e seguir as instruções da plataforma para realizar o deploy.  
    - Para outras plataformas, fazer o build do contêiner (se aplicável) e configurar o processo de deploy (por exemplo, realizar o push para o serviço, configurar o domínio, etc.).
 
-
+\n\n
 6. **Monitoramento e Manutenção**  
    - Após o deploy, monitorar o app quanto à performance e erros.  
    - Configurar logs e, se possível, alertas para identificar problemas rapidamente.  
