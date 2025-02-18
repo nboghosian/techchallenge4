@@ -262,21 +262,21 @@ with tab4:
    - Criar e testar o app localmente, garantindo que todas as funcionalidades estejam funcionando conforme o esperado.  
    - Utilizar um ambiente virtual (venv ou conda) e gerenciar as dependências (via requirements.txt).
 
+
 2. **Gerenciamento de Dependências e Versionamento**  
    - Certificar-se de que todas as bibliotecas necessárias estejam listadas em um arquivo requirements.txt.  
    - Versionar o código usando Git, hospedando-o em um repositório (GitHub, GitLab, etc.) para facilitar a integração contínua.
 
-3. **Configuração do Ambiente de Produção**  
-   - Configurar variáveis de ambiente, chaves e outras configurações sensíveis de forma segura.  
-   - Preparar um arquivo de configuração (por exemplo, .env) para gerenciar essas variáveis, se necessário.
 
-4. **Escolher da Plataforma de Deploy**  
+3. **Escolher da Plataforma de Deploy**  
    - Utilizar o Streamlit Cloud, que é uma plataforma gratuita e simples para deploy de apps Streamlit.  
    - Ou optar por outras plataformas, como Heroku, Render, AWS ou GCP, se houver necessidade de mais controle ou escalabilidade.
+
 
 5. **Deploy**  
    - No caso do Streamlit Cloud, conectar o repositório e seguir as instruções da plataforma para realizar o deploy.  
    - Para outras plataformas, fazer o build do contêiner (se aplicável) e configurar o processo de deploy (por exemplo, realizar o push para o serviço, configurar o domínio, etc.).
+
 
 6. **Monitoramento e Manutenção**  
    - Após o deploy, monitorar o app quanto à performance e erros.  
