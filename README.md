@@ -1,25 +1,9 @@
-# 📦 Streamlit App Starter Kit 
-```
-⬆️ (Replace above with your app's name)
-```
+# 📦 Techchallenge 4
 
-Description of the app ...
 
-## Demo App
+Trabalho final da Fase 4 - Data viz and production models
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://app-starter-kit.streamlit.app/)
-
-## GitHub Codespaces
-
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/streamlit/app-starter-kit?quickstart=1)
-
-## Section Heading
-
-This is filler text, please replace this with text for this section.
-
-## Further Reading
-
-This is filler text, please replace this with a explanatory text about further relevant resources for this repo
-- Resource 1
-- Resource 2
-- Resource 3
+Outros links: 
+1. https://colab.research.google.com/drive/1h8VVlJ512b_nhdhQiQ5LGYupaQheOpUQ?usp=sharing#scrollTo=T7_W59v2HAOp
+2. https://github.com/nboghosian/techchallenge4_powerbi
+3. http://www.ipeadata.gov.br/ExibeSerie.aspx?module=m&serid=1650971490&oper=view
