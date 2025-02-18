@@ -121,7 +121,7 @@ with tab2:
     st.image("petroleo5.png", caption="2022")
     
 
-    st.markdown("Baixe o arquivo .pbix [arquivo .pbix no GitHub](https://github.com/nboghosian/techchallenge4_powerbi) e interaja com os visuais!")
+    st.markdown("Baixe o [arquivo .pbix no GitHub](https://github.com/nboghosian/techchallenge4_powerbi) e interaja com os visuais!")
 
 
 
