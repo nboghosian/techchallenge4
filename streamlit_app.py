@@ -106,19 +106,23 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 with tab2:
     st.header("✨ Principais Insights")
 
-    st.image("petroleo1.png", caption="")
-    
-    st.image("petroleo2.png", caption="")
-    
-    st.image("petroleo3.png", caption="")
-    
-    st.image("petroleo4.png", caption="")
-    
-    st.image("petroleo5.png", caption="")
-    
-    st.write("""
-    escrever aqui
+     st.write("""
+    A fim de exibir os principais insights e um dashboard interativo foi desenvolvido utilizando o Power BI.
     """)
+
+    st.image("petroleo1.png", caption="Página Inicial")
+    
+    st.image("petroleo2.png", caption="1998")
+    
+    st.image("petroleo3.png", caption="2008")
+    
+    st.image("petroleo4.png", caption="2020")
+    
+    st.image("petroleo5.png", caption="2022")
+    
+
+    st.markdown("Baixe o arquivo .pbix [arquivo .pbix no GitHub](https://github.com/nboghosian/techchallenge4_powerbi) e interaja com os visuais!")
+
 
 
     
