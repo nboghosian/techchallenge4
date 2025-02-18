@@ -26,7 +26,7 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 **Referências**
 - Baumeister, C., & Kilian, L. (2016). Forty years of oil price fluctuations: Why the price of oil may still surprise us. Journal of Economic Perspectives, 30(1), 139-160.
 - Hamilton, J. D. (2009). Causes and Consequences of the Oil Shock of 2007-08. Brookings Papers on Economic Activity, 2009(1), 215-261.
-- Instituto de Pesquisa Econômica Aplicada (IPEA). (2024). Base de dados histórica do preço do petróleo Brent. Disponível em: www.ipea.gov.br (Acessado em: [data de acesso]).
+- Instituto de Pesquisa Econômica Aplicada (IPEA). (2024). Base de dados histórica do preço do petróleo Brent. Disponível em: www.ipea.gov.br.
 
     """)
 
@@ -106,7 +106,16 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 with tab2:
     st.header("✨ Principais Insights")
 
-    # st.image("minha_imagem.png", caption="Exemplo de imagem local") 
+    st.image("petroleo1.png", caption="")
+    
+    st.image("petroleo2.png", caption="")
+    
+    st.image("petroleo3.png", caption="")
+    
+    st.image("petroleo4.png", caption="")
+    
+    st.image("petroleo5.png", caption="")
+    
     st.write("""
     escrever aqui
     """)
