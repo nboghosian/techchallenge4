@@ -21,10 +21,9 @@ with tab1:
     st.write("""
     O mercado de petróleo é um dos mais influentes na economia global, impactando desde o custo de produção industrial até os preços ao consumidor. O petróleo Brent, referência internacional para precificação da commodity, é negociado diariamente e sua volatilidade pode ser influenciada por fatores geopolíticos, variações na demanda, mudanças na oferta e políticas econômicas (Hamilton, 2009).
 A análise de dados históricos de preços do petróleo Brent, disponível no repositório do Instituto de Pesquisa Econômica Aplicada (IPEA), fornece uma base essencial para identificar tendências, padrões sazonais e possíveis ciclos de preço. Essa base de dados é composta por duas colunas principais: data e preço (em dólares), permitindo uma abordagem quantitativa para modelagem preditiva e análise de impacto econômico (IPEA, 2024).
-Neste contexto, a exploração desses dados pode oferecer insights estratégicos para investidores, gestores públicos e empresas do setor energético, possibilitando a construção de modelos preditivos e paineis interativos que auxiliam na tomada de decisão (Baumeister & Kilian, 2016).
+Neste contexto, a exploração desses dados pode oferecer insights estratégicos por meio da construção de modelos preditivos e painéis que auxiliem na tomada de decisão.
 
 **Referências**
-- Baumeister, C., & Kilian, L. (2016). Forty years of oil price fluctuations: Why the price of oil may still surprise us. Journal of Economic Perspectives, 30(1), 139-160.
 - Hamilton, J. D. (2009). Causes and Consequences of the Oil Shock of 2007-08. Brookings Papers on Economic Activity, 2009(1), 215-261.
 - Instituto de Pesquisa Econômica Aplicada (IPEA). (2024). Base de dados histórica do preço do petróleo Brent. Disponível em: www.ipea.gov.br.
 
@@ -249,6 +248,9 @@ Portanto, visando orientar o cliente sobre planejamento, compra de insumos, defi
         )
     
         st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("A análise exploratória e desenvolvimento do modelo estão disponíveis no [Google Colab](https://colab.research.google.com/drive/1h8VVlJ512b_nhdhQiQ5LGYupaQheOpUQ?usp=sharing).")
+
 
 
 
