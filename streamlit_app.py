@@ -106,7 +106,7 @@ Neste contexto, a exploração desses dados pode oferecer insights estratégicos
 with tab2:
     st.header("✨ Principais Insights")
 
-     st.write("""
+    st.write("""
     A fim de exibir os principais insights e um dashboard interativo foi desenvolvido utilizando o Power BI.
     """)
 
