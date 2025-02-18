@@ -258,7 +258,7 @@ with tab4:
 
     st.header("🎲 Plano Completo de Deploy")
 
-    st.write(""" 	1. **Desenvolvimento e Testes Locais**  
+    st.write(""" 	\n\n 1. **Desenvolvimento e Testes Locais**  
    - Criar e testar o app localmente, garantindo que todas as funcionalidades estejam funcionando conforme o esperado.  
    - Utilizar um ambiente virtual (venv ou conda) e gerenciar as dependências (via requirements.txt).
 
